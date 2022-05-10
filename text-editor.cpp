@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -9,6 +10,7 @@ fstream file;
 
 const char ESC = 27;
 const char RETURN = 10;
+const char slash = 47;
 
 
 void choose_file(){
@@ -28,13 +30,13 @@ void choose_file(){
 
 void add(){
     char ch;
-    cout << "Enter your text and press ESC button when you want to end:\n";
+    cout << "Enter your text and enter '/' when you want to end:\n";
     file.open(file_name, ios::app);
     cin.ignore();
-    while(ch != ESC){
-        ch = getchar();
+    while((ch = getchar()) != slash){
         file << ch;
     }
+
     file.close();
 }
 
@@ -96,6 +98,97 @@ void decrypt(){
     file.close();
 }
 
+void merge(){
+    string file_name_2;
+    string str;
+    cout << "Please enter the name of the second file: ";
+    cin >> file_name_2;
+    file_name_2+= ".txt";
+    file.open(file_name_2, ios::in);
+    if(file.fail()){
+        cout << "This file doesn't exsit" << endl;
+        file.close();
+    }
+    else {
+        while(!file.eof()){
+            str+= file.get();
+        }
+        str.resize(str.length()-1);
+        file.close();
+        file.open(file_name, ios::app);
+        file << str;
+        file.close();
+        }
+
+}
+
+void countWords(){
+    int numberWords=0;
+    string word;
+    file.open(file_name, ios:: in);
+    while (!file.eof()){
+        file >> word;
+        numberWords++;
+        }
+
+    cout << "Number of words = " << numberWords-1 << endl;
+    file.close();
+}
+
+void countChar(){
+    int numberChar =0;
+    char theChar;
+    file.open(file_name, ios:: in);
+    while (!file.eof()) {
+        file >> theChar;
+        numberChar++;
+    }
+    cout << "Number of Characters = " << numberChar-1 << endl;
+    file.close();
+}
+
+void countLines(){
+    int numberLines =0;
+    string line;
+    file.open(file_name, ios:: in);
+    while(getline(file,line)){
+        numberLines++;
+    }
+    cout << "Number of Lines = " << numberLines << endl;
+    file.close();
+}
+
+void search(){
+    cin.ignore();
+    string search;
+    cout << "Enter a word to search for : ";
+    cin >> search;
+    for_each(search.begin(), search.end(), [](char & c){c = tolower(c);});
+    file.open(file_name,ios::in);
+    string word;
+    bool flag=true;
+    while(file >> word)
+    {
+        for_each(word.begin(), word.end(), [](char & c){c = tolower(c);});
+        if(word == search)
+        {
+            cout << "Word was found " << endl;
+            flag=true;
+            break;
+        }
+        else
+        {
+            flag=false;
+        }
+    }
+    if(flag==false)
+    {
+        cout << "Word was not found" << endl;
+    }
+    file.close();
+}
+
+
 
 int main(){
     char input, in;
@@ -125,11 +218,11 @@ int main(){
         case '1':
             add();
             break;
-        
+
         case '2':
             display();
             break;
-            
+
         case '3':
             clear();
             break;
@@ -140,6 +233,26 @@ int main(){
 
         case '5':
             decrypt();
+            break;
+
+        case '6':
+            merge();
+            break;
+
+        case '7':
+            countWords();
+            break;
+
+        case '8':
+            countChar();
+            break;
+
+        case '9':
+            countLines();
+            break;
+
+        case 'A':
+            search();
             break;
 
         default:
