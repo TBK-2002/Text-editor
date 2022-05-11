@@ -14,7 +14,7 @@ const char slash = 47;
 
 
 void choose_file(){
-    cout << "Please enter the name of the file: ";
+    cout << "Please enter the name of the file or type: ";
     cin >> file_name;
     file_name+= ".txt";
     file.open(file_name);
@@ -36,7 +36,6 @@ void add(){
     while((ch = getchar()) != slash){
         file << ch;
     }
-
     file.close();
 }
 
@@ -188,7 +187,95 @@ void search(){
     file.close();
 }
 
+void countTimesWord(){
+    cin.ignore();
+    string search;
+    int times = 0;
+    cout << "Enter the word you want to count for: ";
+    cin >> search;
+    for_each(search.begin(), search.end(), [](char & c){c = tolower(c);});
+    file.open(file_name,ios::in);
+    string word;
+    bool flag=false;
+    while(file >> word)
+    {
+        for_each(word.begin(), word.end(), [](char & c){c = tolower(c);});
+        if(word == search)
+        {
+            times++;
+            flag=true;
+        }
+    }
+    if(!flag)
+    {
+        cout << "Word was not found" << endl;
+    }
+    else{
+        cout << "This word has appeared " << times << " time/s in the file." << endl; 
+    }
+    file.close();
+}
 
+void turnUpper(){
+    string str;
+    char ch;
+    file.open(file_name, ios::in);
+    while(!file.eof()){
+        ch = file.get();
+        if(isalpha(ch)){
+            str+= toupper(ch);
+        }
+        else{
+            str+= ch;
+        }
+    }
+    str.resize(str.length()-1);
+    file.close();
+    file.open(file_name, ios::out);
+    file << str;
+    file.close();
+}
+
+void turnLower(){
+    string str;
+    char ch;
+    file.open(file_name, ios::in);
+    while(!file.eof()){
+        ch = file.get();
+        if(isalpha(ch)){
+            str+= tolower(ch);
+        }
+        else{
+            str+= ch;
+        }
+    }
+    str.resize(str.length()-1);
+    file.close();
+    file.open(file_name, ios::out);
+    file << str;
+    file.close();
+}
+
+void firstCaps(){
+    string str;
+    file.open(file_name, ios::in);
+    while(!file.eof()){
+        str+= file.get();
+    }
+    str.resize(str.length()-1);
+    file.close();
+    if(isalpha(str[0])){
+        str[0] = toupper(str[0]);
+    }
+    for(int i = 0; i < str.length(); i++){
+        if(isalpha(str[i]) && !isalpha(str[i-1])){
+            str[i] = toupper(str[i]);
+        }
+    }
+    file.open(file_name, ios::out);
+    file << str;
+    file.close();
+}
 
 int main(){
     char input, in;
@@ -209,7 +296,6 @@ int main(){
              << "C. Turn the file content to upper case." << endl
              << "D. Turn the file content to lower case." << endl
              << "E. Turn file content to 1st caps (1st char of each word is capital)" << endl
-             << "F. Save" << endl
              << "G. Exit" << endl;
         cin >> input;
         in = toupper(input);
@@ -255,11 +341,38 @@ int main(){
             search();
             break;
 
+        case 'B':
+            countTimesWord();
+            break;
+
+        case 'C':
+            turnUpper();
+            break;
+
+        case 'D':
+            turnLower();
+            break;
+
+        case 'E':
+            firstCaps();
+            break;
+
+        case 'G':
+            return 0;
+            break;
+
         default:
             cout << "Sorry invalid input\n";
             break;
         }
-        
+        char ans;
+        cout << "Do you you want to continue using our program [Y/n]: ";
+        cin >> ans;
+        ans = toupper(ans);
+        if(ans == 'N'){
+            cout << "Thank you for using our program";
+            return 0;
+        }
     }
     return 0;
 }
