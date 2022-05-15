@@ -23,6 +23,7 @@ int main(){
              << "C. Turn the file content to upper case." << endl
              << "D. Turn the file content to lower case." << endl
              << "E. Turn file content to 1st caps (1st char of each word is capital)" << endl
+             << "F. Turn file content to 1st caps (1st char of each word is capital)" << endl
              << "G. Exit" << endl;
         cin >> input;
         in = toupper(input);
@@ -82,6 +83,10 @@ int main(){
 
         case 'E':
             firstCaps();
+            break;
+
+        case 'F':
+            save_as();
             break;
 
         case 'G':

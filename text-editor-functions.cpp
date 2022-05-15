@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-#include "text-editor-functions.h"
+#include "text-editor-functions.cpp"
 
 
 using namespace std;
@@ -273,5 +273,18 @@ void firstCaps(){
     }
     file.open(file_name, ios::out);
     file << str;
+    file.close();
+}
+
+void save_as(){
+    string target_file, text;
+    cout << "Enter target file name";
+    cin >> target_file;
+    target_file += ".txt";
+    file.open(file_name, ios::in);
+    text = file.rdbfr();
+    file.close();
+    file.open(target_file, ios::out);
+    file << text;
     file.close();
 }
