@@ -14,12 +14,12 @@ fstream file;
 void choose_file(){
     cout << "Please enter the name of the file or type: ";
     cin >> file_name;
-    file_name+= ".txt";
+    file_name+= ".txt"; //the file that the user enters turns to text
     file.open(file_name);
     if(file.fail()){
         file.open(file_name, ios::out);
         cout << "This is a new file. I created it for you.\n";
-    }
+    } //if the file is empty it'll make i new file
     else{
         cout << "This File Already Exists.\n";
     }
@@ -30,11 +30,11 @@ void add(){
     char ch;
     cout << "Enter your text and enter '/' when you want to end:\n";
     file.open(file_name, ios::app);
-    cin.ignore();
-    file << '\n';
+    cin.ignore(); //clearing what was entered before
+    file << '\n'; //reading lines
     while((ch = getchar()) != slash){
         file << ch;
-    }
+    } //enterting the characters that the user is entering
     file.close();
 }
 
@@ -44,13 +44,13 @@ void display(){
     while(!file.eof()){
         getline(file, temp);
         cout << temp << endl;
-    }
+    } //until the files reachs end, print what is written in it
 }
 
 void clear(){
     file.open(file_name, ios::out);
     file.close();
-}
+} //erase what is written in the file
 
 void encrypt(){
     vector<char> ch;
@@ -59,14 +59,14 @@ void encrypt(){
         char c;
         file.get(c);
         ch.push_back(c);
-    }
-    ch.pop_back();
+    } //declaring an vector array and putting what is in the file in it
+    ch.pop_back(); //remove the last character from the array
     file.close();
     file.open(file_name, ios::out);
     for(char c: ch){
         if(c != '\n'){
             file << char(c + 1);
-        }
+        } //if the character not equal to space , add to the character one which will change it to the next character
         else{
             file << c;
         }
@@ -88,7 +88,7 @@ void decrypt(){
     for(char c: ch){
         if(c != '\n'){
             file << char(c - 1);
-        }
+        } //same thing as encryption , instead we subtract one to get back to the previous ascii
         else{
             file << c;
         }
@@ -110,11 +110,11 @@ void merge(){
     else {
         while(!file.eof()){
             str+= file.get();
-        }
-        str.resize(str.length()-1);
+        } //put in a new string each character in the file
+        str.resize(str.length()-1); //remove the last character from the string
         file.close();
         file.open(file_name, ios::app);
-        file << str;
+        file << str; //read in the file the new string after merging
         file.close();
         }
 
@@ -127,7 +127,7 @@ void countWords(){
     while (!file.eof()){
         file >> word;
         numberWords++;
-        }
+        } //after reading each word , the iterator increases by one
 
     cout << "Number of words = " << numberWords-1 << endl;
     file.close();
@@ -140,7 +140,7 @@ void countChar(){
     while (!file.eof()) {
         file >> theChar;
         numberChar++;
-    }
+    }//after reading each character , the iterator increases by one
     cout << "Number of Characters = " << numberChar-1 << endl;
     file.close();
 }
@@ -151,7 +151,7 @@ void countLines(){
     file.open(file_name, ios:: in);
     while(getline(file,line)){
         numberLines++;
-    }
+    } //reading each line increases the iterator by one
     cout << "Number of Lines = " << numberLines << endl;
     file.close();
 }
@@ -161,13 +161,13 @@ void search(){
     string search;
     cout << "Enter a word to search for : ";
     cin >> search;
-    for_each(search.begin(), search.end(), [](char & c){c = tolower(c);});
+    for_each(search.begin(), search.end(), [](char & c){c = tolower(c);}); //turning each character to lower
     file.open(file_name,ios::in);
     string word;
     bool flag=true;
-    while(file >> word)
+    while(file >> word) //while reading the file
     {
-        for_each(word.begin(), word.end(), [](char & c){c = tolower(c);});
+        for_each(word.begin(), word.end(), [](char & c){c = tolower(c);}); //turn each character to lower to make it easier while searching
         if(word == search)
         {
             cout << "Word was found " << endl;
@@ -204,7 +204,7 @@ void countTimesWord(){
             times++;
             flag=true;
         }
-    }
+    }//increasing the iterator by one after finding the same word
     if(!flag)
     {
         cout << "Word was not found" << endl;
@@ -223,7 +223,7 @@ void turnUpper(){
         ch = file.get();
         if(isalpha(ch)){
             str+= toupper(ch);
-        }
+        } //if the character is alphabet , turn it to uppercase
         else{
             str+= ch;
         }
@@ -243,7 +243,7 @@ void turnLower(){
         ch = file.get();
         if(isalpha(ch)){
             str+= tolower(ch);
-        }
+        } //if the character is alpahbet , turn it to lowercase
         else{
             str+= ch;
         }
@@ -265,26 +265,29 @@ void firstCaps(){
     file.close();
     if(isalpha(str[0])){
         str[0] = toupper(str[0]);
-    }
+    }//if the first character is alphabet, turn it to uppercase
     for(int i = 0; i < str.length(); i++){
         if(isalpha(str[i]) && !isalpha(str[i-1])){
             str[i] = toupper(str[i]);
         }
-    }
+    } //if the character is alphabet after a space turn it to upper
     file.open(file_name, ios::out);
     file << str;
     file.close();
 }
 
 void save_as(){
-    string target_file, text;
+    string target_file, str;
     cout << "Enter target file name";
     cin >> target_file;
     target_file += ".txt";
     file.open(file_name, ios::in);
-    text = file.rdbfr();
+    while(!file.eof()){
+        str+= file.get();
+    }
+    str.resize(str.length()-1);
     file.close();
     file.open(target_file, ios::out);
-    file << text;
+    file << str;
     file.close();
 }

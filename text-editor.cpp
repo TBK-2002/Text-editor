@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "text-editor-functions.cpp"
+#include "text-editor-functions.h"
 
 using namespace std;
 

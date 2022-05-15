@@ -1,0 +1,3 @@
+"D:\Applications\CLion 2021.3.4\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\Text_editor.dir/objects.a
+"D:\Applications\CLion 2021.3.4\bin\mingw\bin\ar.exe" qc CMakeFiles\Text_editor.dir/objects.a @CMakeFiles\Text_editor.dir\objects1.rsp
+"D:\Applications\CLion 2021.3.4\bin\mingw\bin\g++.exe" -g -Wl,--whole-archive CMakeFiles\Text_editor.dir/objects.a -Wl,--no-whole-archive -o Text_editor.exe -Wl,--out-implib,libText_editor.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Text_editor.dir\linklibs.rsp
